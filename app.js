@@ -7,19 +7,18 @@ try{const p=JSON.parse(localStorage.getItem("sp-prefs")||"{}");Object.assign(pre
 const canSpeak="speechSynthesis" in window;
 const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
 
-// The six steps of every sit. Speaking happens in the first four; the meditation fills whatever is left of the total.
+// The five steps of every sit. All the teaching comes first; then a long silent meditation and a short seal.
 // lines: [seconds into the step, ...keys] — the keys are spoken one after another from that point.
 function SEGS(d){
-  const T=DATA.timeline,place=d.where.split(",")[0].toLowerCase();
-  const sitDur=DATA.totalSeconds-T.arrive-T.breath-T.body-T.ask-T.seal;
+  const T=DATA.timeline,G=DATA.guideSeconds||12;
   return [
-   {key:"arrive",name:"Arrive",dur:T.arrive,read:d.say.arrive,lines:[[3,"arrive"]]},
-   {key:"breath",name:d.breath.name,dur:T.breath,read:d.breath.read,lines:[[0,"intro"],...(d.breath.lines||[])],pattern:d.breath.pattern},
-   {key:"body",name:"Body scan",dur:T.body,read:`From the feet up through the body, ending at the ${place}. `+d.pool,
-    lines:[[0,"breath_end","body_1","body_2","body_3","body_4","body_5","pool"]]},
-   {key:"ask",name:"Ask",dur:T.ask,q:true,read:d.ask,lines:[[0,"ask_intro","ask","ask_after"]]},
-   {key:"sit",name:"Meditation",dur:sitDur,bell:true,read:"Silent. Drop the technique and the question and just sit. When a thought pulls you, notice it and return to the breath.",lines:[[2,"meditate"]]},
-   {key:"seal",name:"Seal",dur:T.seal,bell:true,read:d.seal,lines:[[2,"seal_intro","seal"]]}
+   {key:"intention",name:"Intention",dur:T.intention,q:true,pre:`${DATA.common.arrive} ${d.say.today}`,read:d.ask,
+    lines:[[2,"arrive","today","ask","hold_q"]]},
+   {key:"breath",name:d.breath.name,dur:T.breath,read:d.breath.read,pattern:d.breath.pattern,guideUntil:T.breath-G,
+    lines:[[0,"intro"],...(d.breath.lines||[]),[T.breath-G,"on_your_own"]]},
+   {key:"pool",name:"The pool",dur:T.pool,read:d.say.pool.replace(/\.\.\./g,","),lines:[[1,"pool"]]},
+   {key:"sit",name:"Meditation",dur:T.meditation,bell:true,read:"Silence. When a thought pulls you away, notice it and return to the breath.",lines:[[3,"meditate"]]},
+   {key:"seal",name:"Seal",dur:T.seal,bell:true,read:d.seal,lines:[[3,"seal_intro","seal"]]}
   ];
 }
 
@@ -44,7 +43,7 @@ function selectDay(i){
   $("teach").innerHTML=`<b>If you teach this</b>${d.teach}`;
   $("barNote").textContent=`${d.el} · ${d.where.split(",")[0]}`;
   segs=SEGS(d);done=false;drawClock();
-  $("steps").innerHTML=segs.map((s,k)=>`<li><span class="n">${k+1}</span><span class="t">${s.name}</span><span class="m">${fmtDur(s.dur)}</span>${s.q?`<span class="q">“${s.read}”</span><span class="hear">You'll hear it once. Then let it rest.</span>`:`<span class="d">${s.read}</span>`}</li>`).join("");
+  $("steps").innerHTML=segs.map((s,k)=>`<li><span class="n">${k+1}</span><span class="t">${s.name}</span><span class="m">${fmtDur(s.dur)}</span>${s.q?`<span class="d">${s.pre}</span><span class="q">“${s.read}”</span><span class="hear">Hold it lightly as your intention for the sit.</span>`:`<span class="d">${s.read}</span>`}</li>`).join("");
 }
 
 /* ---------- countdown ---------- */
@@ -152,13 +151,13 @@ function tick(){
     if(seg.paceFrom==null&&segElapsed>25)seg.paceFrom=segElapsed; // in case the introduction never reports finishing
     if(seg.paceFrom!=null&&segElapsed>=seg.paceFrom){
       const pi=phaseIdx(seg,segElapsed-seg.paceFrom),p=seg.pattern[pi%100];
-      if(pi!==lastPhase){lastPhase=pi;tone(p[0],p[1]);if(!speaking)playClip(clipId(p[2]))}
+      if(pi!==lastPhase){lastPhase=pi;tone(p[0],p[1]);if(!speaking&&segElapsed<seg.guideUntil)playClip(clipId(p[2]))}
       if(p[0]==="pump"){tickAcc+=dt;if(tickAcc>=.9){tickAcc=0;tone("tick")}}
     }
   }
 }
-function finish(){stop();stopVoice();inSession=false;done=true;bell(3);setTimeout(()=>playClip("common-complete"),3500);addCount();
-  setTimeout(()=>{$("sit").hidden=true},6000)}
+function finish(){stop();stopVoice();inSession=false;done=true;bell(3);setTimeout(()=>playClip("common-complete"),4200);addCount();
+  setTimeout(()=>{$("sit").hidden=true},7500)}
 function stop(){running=false;clearInterval(timer);timer=null;try{wake&&wake.release()}catch(e){}wake=null}
 function pause(why){if(!running)return;stop();stopVoice();$("sitLive").hidden=true;$("paused").hidden=false;
   const s=segI<0?"settling":`step ${segI+1}, ${segs[segI].name}`;$("pausedNote").textContent=(why||"Paused")+` during ${s}`}
