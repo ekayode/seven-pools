@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Seven Pools</title>
+<meta name="description" content="A 12-minute daily chakra sit, one pool for each day of the week.">
+<meta name="theme-color" content="#eef0f3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1219" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Seven Pools">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Karla:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div><div class="eyebrow">Daily sit · 12 minutes, eyes closed</div><h1>Seven Pools</h1></div>
+    <div id="count"></div>
+  </header>
+
+  <div class="install" id="install"><b>Put this on your home screen.</b> In Safari, tap Share, then <b>Add to Home Screen</b>. It opens full-screen, works offline, and plays sound with the silent switch on.</div>
+
+  <nav class="days" id="days" aria-label="Choose a day"></nav>
+
+  <section class="pool">
+    <div class="eyebrow" id="poolEyebrow"></div>
+    <h2 id="poolTitle"></h2>
+    <dl class="facts">
+      <dt>Where</dt><dd id="fWhere"></dd>
+      <dt>Deals with</dt><dd id="fDeals"></dd>
+      <dt>Blocked by</dt><dd id="fBlock"></dd>
+      <dt>Silent sound</dt><dd id="fBija"></dd>
+    </dl>
+    <p class="release" id="release"></p>
+  </section>
+
+  <section class="steps">
+    <h3>Read this before you sit</h3>
+    <p class="lede">Take a minute with it. Once you press Begin, the screen goes black and you won't need to look again. A voice names each step, a bell marks each change, and soft tones pace the breath.</p>
+    <ol id="steps"></ol>
+  </section>
+
+  <section class="sound">
+    <div class="eyebrow">Sound check</div>
+    <div class="toggles">
+      <button class="chip" id="tVoice" aria-pressed="true">Voice cues</button>
+      <button class="chip" id="tTones" aria-pressed="true">Breath tones</button>
+      <button class="chip" id="test">Test sound</button>
+    </div>
+    <p id="voiceNote">Set your volume with Test sound.</p>
+  </section>
+
+  <section class="notes">
+    <h3>Habits that help</h3>
+    <ul>
+      <li>Decide the night before: same spot, same time. In the morning, open the app, read for one minute, press Begin, and set the phone face down.</li>
+      <li>You get 10 seconds after Begin to put the phone down and settle. A bell starts the session; three bells end it.</li>
+      <li>Don't lock the phone during the sit. The screen stays on but black so the timing keeps working. If it locks or you switch apps, the session pauses where you left it.</li>
+      <li>Sit on the cushion by default. Kneel if your hips are tight. Lie down only when tired, and on Fire day swap the pumping breath for slow belly breaths.</li>
+      <li>Sitting again later? Repeat the same day. Tap the black screen once to pause or end.</li>
+      <li>If the question in step 4 brings up something heavy, let it be there and return to the breath. You don't need to solve it on the cushion.</li>
+    </ul>
+    <div class="teach" id="teach"></div>
+  </section>
+</div>
+
+<div class="bar"><div class="in"><small id="barNote"></small><button class="begin" id="begin">Begin · 12 min</button></div></div>
+
+<div id="sit" hidden>
+  <div id="sitLive"><div class="big" id="sitStep"></div><div class="small">Eyes closed · tap once to pause</div></div>
+  <div id="paused" hidden>
+    <p id="pausedNote">Paused</p>
+    <div class="row"><button id="resume">Resume</button><button id="end">End session</button></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
