@@ -23,7 +23,7 @@
 
 <div class="wrap">
   <header>
-    <div><div class="eyebrow">Daily sit · 12½ minutes, 10 of them quiet</div><h1>Seven Pools</h1></div>
+    <div><div class="eyebrow">Daily sit · 10 minutes of quiet, guided or not</div><h1>Seven Pools</h1></div>
     <div id="count"></div>
   </header>
 
@@ -51,9 +51,17 @@
     <div id="clockSub"></div>
   </section>
 
+  <section class="mode" aria-label="Session type">
+    <div class="eyebrow">Session</div>
+    <div class="toggles">
+      <button class="chip" id="mGuided" aria-pressed="true">Guided</button>
+      <button class="chip" id="mSilent" aria-pressed="false">No guidance</button>
+    </div>
+  </section>
+
   <section class="steps">
     <h3>Read this before you sit</h3>
-    <p class="lede">Take a minute with it. Once you press Begin, you won't need to look again. All the guidance comes first, in about two minutes: your intention, the breath, and the pool. Then ten minutes of quiet, where the guru checks in briefly every few minutes, and a short seal.</p>
+    <p class="lede" id="lede"></p>
     <ol id="steps"></ol>
   </section>
 

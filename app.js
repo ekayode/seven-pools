@@ -2,7 +2,7 @@
 const $=id=>document.getElementById(id);
 let DATA=null, DAYS=[], SETTLE=10, todayIdx=0, CLIPS=null;
 let cur=0, segs=[], segI=-1, segElapsed=0, running=false, inSession=false, done=false, last=0, timer=null, wake=null, ctx=null, lastPhase=-1, tickAcc=0;
-const prefs={voice:true,tones:true};
+const prefs={voice:true,tones:true,mode:"guided"}; // mode: guided | silent
 try{const p=JSON.parse(localStorage.getItem("sp-prefs")||"{}");Object.assign(prefs,p)}catch(e){}
 const canSpeak="speechSynthesis" in window;
 const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
@@ -23,6 +23,17 @@ function SEGS(d){
    {key:"seal",name:"Seal",dur:T.seal,bell:true,read:d.seal,lines:[[3,"seal_intro","seal"]]}
   ];
 }
+// No guidance: straight into the meditation. A bell starts it, soft bells mark the check-in times, three bells end it.
+function SILENT(d){
+  return [{key:"sit",name:"Meditation",dur:DATA.timeline.meditation,lines:[],chimes:DATA.checkins,
+    read:`Silence, with no voice. A bell begins the sit, a soft bell marks ${DATA.checkins.map(s=>fmt(s)).join(" and ")}, and three bells end it. When a thought pulls you away, notice it and return to the breath.`}];
+}
+const guided=()=>prefs.mode!=="silent";
+const LEDE={
+  guided:"Take a minute with it. Once you press Begin, you won't need to look again. All the guidance comes first, in about two minutes: your intention, the breath, and the pool. Then ten minutes of quiet, where the guru checks in briefly every few minutes, and a short seal.",
+  silent:"No guidance today. Once you press Begin, you get ten seconds to settle, then the meditation starts straight away. Bring the pool and the question below with you if you like."
+};
+const minLabel=s=>{const m=s/60;return (Number.isInteger(m)?m:Math.floor(m)+(m%1>=.5?"½":""))+" min"};
 
 function dateKey(){const n=new Date();return n.getFullYear()+"-"+(n.getMonth()+1)+"-"+n.getDate()}
 function readCount(){try{return +(localStorage.getItem("sp-"+dateKey())||0)}catch(e){return 0}}
@@ -44,7 +55,10 @@ function selectDay(i){
   $("release").textContent=d.release;
   $("teach").innerHTML=`<b>If you teach this</b>${d.teach}`;
   $("barNote").textContent=`${d.el} · ${d.where.split(",")[0]}`;
-  segs=SEGS(d);done=false;drawClock();
+  segs=guided()?SEGS(d):SILENT(d);done=false;drawClock();
+  $("mGuided").setAttribute("aria-pressed",guided());$("mSilent").setAttribute("aria-pressed",!guided());
+  $("mGuided").textContent=`Guided · ${minLabel(SEGS(d).reduce((a,s)=>a+s.dur,0))}`;$("mSilent").textContent=`No guidance · ${minLabel(DATA.timeline.meditation)}`;
+  $("lede").textContent=LEDE[prefs.mode]||LEDE.guided;$("begin").textContent=`Begin · ${minLabel(total())}`;
   $("steps").innerHTML=segs.map((s,k)=>`<li><span class="n">${k+1}</span><span class="t">${s.name}</span><span class="m">${fmtDur(s.dur)}</span>${s.q?`<span class="d">${s.pre}</span><span class="q">“${s.read}”</span><span class="hear">Hold it lightly as your intention for the sit.</span>`:`<span class="d">${s.read}</span>`}</li>`).join("");
 }
 
@@ -56,7 +70,7 @@ function timeLeft(){if(!inSession)return done?0:total();if(segI<0)return total()
   let r=segs[segI].dur-segElapsed;for(let k=segI+1;k<segs.length;k++)r+=segs[k].dur;return r}
 function drawClock(){
   const l=timeLeft(),t=fmt(l);let now;
-  if(!inSession)now=done?"Complete. Carry the seal with you.":`Ready · ${segs.length} steps`;
+  if(!inSession)now=done?"Complete. Carry the seal with you.":`Ready · ${segs.length} step${segs.length>1?"s":""}`;
   else if(segI<0)now=`Settling · starts in ${fmt(SETTLE-segElapsed)}`;
   else now=`${segs[segI].name} · ${fmt(segs[segI].dur-segElapsed)} left`;
   const sub=inSession&&segI>=0?`Step ${segI+1} of ${segs.length} · ${now}`:now;
@@ -70,10 +84,10 @@ function drawClock(){
 // "playback" lets Safari play through the silent switch (iOS 17+).
 try{if(navigator.audioSession)navigator.audioSession.type="playback"}catch(e){}
 function ac(){try{ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();if(ctx.state!=="running")ctx.resume()}catch(e){}return ctx}
-function bell(n=1,delay=0){const c=ac();if(!c)return;
+function bell(n=1,delay=0,vol=1){const c=ac();if(!c)return;
   for(let r=0;r<n;r++){const t0=c.currentTime+delay+r*1.6;
     [[220,.2],[330,.08],[607,.05]].forEach(([f,v])=>{const o=c.createOscillator(),g=c.createGain();o.type="sine";o.frequency.value=f;
-      g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(v,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+4.5);
+      g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(v*vol,t0+.02);g.gain.exponentialRampToValueAtTime(.0001,t0+4.5);
       o.connect(g).connect(c.destination);o.start(t0);o.stop(t0+4.6)})}}
 function tone(type,dur){ // inhale rises, exhale falls; holds are silent
   if(!prefs.tones)return;const c=ac();if(!c)return;const t0=c.currentTime;
@@ -131,13 +145,13 @@ function keepAwake(){try{navigator.wakeLock&&navigator.wakeLock.request("screen"
 function phaseIdx(seg,t){const len=seg.pattern.reduce((a,p)=>a+p[1],0);let x=t%len,k=0,cyc=Math.floor(t/len);
   for(;k<seg.pattern.length;k++){if(x<seg.pattern[k][1])break;x-=seg.pattern[k][1]}return cyc*100+k}
 function enterSeg(i){segI=i;segElapsed=0;lastPhase=-1;tickAcc=0;rot={in:0,out:0};
-  const s=segs[i];s.fired=0;s.paceFrom=null;
-  if(s.bell)bell(1);$("sitStep").textContent=`Step ${i+1} of ${segs.length}`}
+  const s=segs[i];s.fired=0;s.chimed=0;s.paceFrom=null;
+  if(s.bell)bell(1);$("sitStep").textContent=segs.length>1?`Step ${i+1} of ${segs.length}`:s.name}
 function begin(){
-  ac();loadClips(dayClipIds(DAYS[cur]));stopVoice();
+  ac();if(guided())loadClips(dayClipIds(DAYS[cur]));stopVoice();
   $("sit").hidden=false;$("sitLive").hidden=false;$("paused").hidden=true;$("sitStep").textContent="Settling";
   segI=-1;segElapsed=0;inSession=true;done=false;run();keepAwake();drawClock();
-  setTimeout(()=>{if(running&&segI<0)speak(["common-settle"])},600);
+  if(guided())setTimeout(()=>{if(running&&segI<0)speak(["common-settle"])},600);
 }
 function run(){running=true;last=performance.now();clearInterval(timer);timer=setInterval(()=>{tick();drawClock()},100)}
 function tick(){
@@ -148,6 +162,8 @@ function tick(){
   // Spoken lines scheduled for this step.
   while(seg.fired<seg.lines.length&&segElapsed>=seg.lines[seg.fired][0]){
     const [,...keys]=seg.lines[seg.fired++];speak(keys.map(k=>clipId(k)))}
+  // Soft time-marking bells (no-guidance sits).
+  while(seg.chimes&&seg.chimed<seg.chimes.length&&segElapsed>=seg.chimes[seg.chimed]){seg.chimed++;bell(1,0,.5)}
   // Breath pacing: a tone and a soft spoken cue at each phase.
   if(seg.pattern){
     if(seg.paceFrom==null&&segElapsed>25)seg.paceFrom=segElapsed; // in case the introduction never reports finishing
@@ -158,7 +174,7 @@ function tick(){
     }
   }
 }
-function finish(){stop();stopVoice();inSession=false;done=true;bell(3);setTimeout(()=>playClip("common-complete"),4200);addCount();
+function finish(){stop();stopVoice();inSession=false;done=true;bell(3);if(guided())setTimeout(()=>playClip("common-complete"),4200);addCount();
   setTimeout(()=>{$("sit").hidden=true},7500)}
 function stop(){running=false;clearInterval(timer);timer=null;try{wake&&wake.release()}catch(e){}wake=null}
 function pause(why){if(!running)return;stop();stopVoice();$("sitLive").hidden=true;$("paused").hidden=false;
@@ -173,6 +189,9 @@ $("tTones").onclick=()=>{prefs.tones=!prefs.tones;savePrefs();syncToggles()};
 $("test").onclick=()=>{ac();loadClips(["common-test"]);bell(1);setTimeout(()=>tone("in",3),600);setTimeout(()=>tone("out",3),3700);
   setTimeout(()=>{stopVoice();speak(["common-test"])},900)};
 $("days").onclick=e=>{const b=e.target.closest(".day");if(b)selectDay(+b.dataset.i)};
+const setMode=m=>{prefs.mode=m;savePrefs();selectDay(cur)};
+$("mGuided").onclick=()=>setMode("guided");
+$("mSilent").onclick=()=>setMode("silent");
 // Timers stop when the phone locks, so pause cleanly instead of skipping ahead.
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&running)pause("Paused (screen locked or app left)")});
 

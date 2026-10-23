@@ -51,6 +51,8 @@ button:focus-visible{outline:2px solid var(--chakra);outline-offset:2px}
 .dial .time{position:absolute;inset:0;display:grid;place-items:center;font-size:46px;font-weight:500;letter-spacing:.02em;font-variant-numeric:tabular-nums}
 #clockSub{font-size:14px;color:var(--muted);text-align:center;font-variant-numeric:tabular-nums}
 
+.mode{display:flex;flex-direction:column;gap:10px}
+
 h3{font-size:22px;margin-bottom:4px}
 .lede{font-size:14px;color:var(--muted);margin:0 0 10px}
 .steps ol{list-style:none;margin:0;padding:0}
