@@ -47,13 +47,15 @@ const total=()=>segs.reduce((a,s)=>a+s.dur,0);
 function timeLeft(){if(!inSession)return done?0:total();if(segI<0)return total();
   let r=segs[segI].dur-segElapsed;for(let k=segI+1;k<segs.length;k++)r+=segs[k].dur;return r}
 function drawClock(){
-  const l=timeLeft(),t=fmt(l);let sub;
-  if(!inSession)sub=done?"Complete. Carry the seal with you.":`Ready · ${segs.length} steps`;
-  else if(segI<0)sub=`Settling · starts in ${fmt(SETTLE-segElapsed)}`;
-  else sub=`Step ${segI+1} of ${segs.length} · ${segs[segI].name} · ${fmt(segs[segI].dur-segElapsed)} left`;
-  if($("clockTime").textContent!==t){$("clockTime").textContent=t;$("sitTime").textContent=t+" left"}
+  const l=timeLeft(),t=fmt(l);let now;
+  if(!inSession)now=done?"Complete. Carry the seal with you.":`Ready · ${segs.length} steps`;
+  else if(segI<0)now=`Settling · starts in ${fmt(SETTLE-segElapsed)}`;
+  else now=`${segs[segI].name} · ${fmt(segs[segI].dur-segElapsed)} left`;
+  const sub=inSession&&segI>=0?`Step ${segI+1} of ${segs.length} · ${now}`:now;
+  if($("clockTime").textContent!==t){$("clockTime").textContent=t;$("sitClock").textContent=t}
   if($("clockSub").textContent!==sub)$("clockSub").textContent=sub;
-  $("ringProg").style.strokeDashoffset=RING*(1-l/total());
+  if($("sitSub").textContent!==now)$("sitSub").textContent=now;
+  const off=RING*(1-l/total());$("ringProg").style.strokeDashoffset=off;$("sitRing").style.strokeDashoffset=off;
 }
 
 /* ---------- audio ---------- */

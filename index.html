@@ -84,7 +84,15 @@
 <div class="bar"><div class="in"><small id="barNote"></small><button class="begin" id="begin">Begin · 12 min</button></div></div>
 
 <div id="sit" hidden>
-  <div id="sitLive"><div class="big" id="sitStep"></div><div class="small" id="sitTime"></div><div class="small">Eyes closed · tap once to pause</div></div>
+  <div id="sitLive">
+    <div class="dial sitDial">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="track" cx="60" cy="60" r="54"/><circle class="prog" id="sitRing" cx="60" cy="60" r="54"/></svg>
+      <div class="time" id="sitClock">12:00</div>
+    </div>
+    <div class="big" id="sitStep"></div>
+    <div class="small" id="sitSub"></div>
+    <div class="small">Eyes closed · tap once to pause</div>
+  </div>
   <div id="paused" hidden>
     <p id="pausedNote">Paused</p>
     <div class="row"><button id="resume">Resume</button><button id="end">End session</button></div>
