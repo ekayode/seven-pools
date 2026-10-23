@@ -1,7 +1,7 @@
 {
  "voice": {
-  "id": "7VzE8ZWW6wZYdS1yhbXo",
-  "name": "Meditative Guru"
+  "id": "DJEpQQM0TKKRXElYuZUn",
+  "name": "Guru Pathik"
  },
  "model": "eleven_v4",
  "settings": {
@@ -9,313 +9,313 @@
   "similarity_boost": 0.8,
   "style": 0.1,
   "use_speaker_boost": true,
-  "speed": 0.85
+  "speed": 0.78
  },
  "clips": {
   "common-settle": {
    "file": "common-settle.mp3",
-   "hash": "4632b49ffc32",
-   "dur": 2.77
+   "hash": "f8445e10e527",
+   "dur": 3
   },
   "common-arrive": {
    "file": "common-arrive.mp3",
-   "hash": "58c0de81483d",
-   "dur": 5.07
+   "hash": "d3020fcd9d09",
+   "dur": 4.99
   },
   "common-hold_q": {
    "file": "common-hold_q.mp3",
-   "hash": "4cfb72aa481b",
-   "dur": 3.87
+   "hash": "21a476b86068",
+   "dur": 4.28
   },
   "common-in_a": {
    "file": "common-in_a.mp3",
-   "hash": "d6a8f2b78725",
+   "hash": "9983e2e2faf7",
    "dur": 1.31
   },
   "common-in_b": {
    "file": "common-in_b.mp3",
-   "hash": "6d076b1633b7",
-   "dur": 2.04
+   "hash": "3cc4033e3b1e",
+   "dur": 1.96
   },
   "common-in_c": {
    "file": "common-in_c.mp3",
-   "hash": "49a978a2d27b",
+   "hash": "8febf1cd5fa8",
    "dur": 1.07
   },
   "common-out_a": {
    "file": "common-out_a.mp3",
-   "hash": "e14c7bb9d71d",
+   "hash": "ca23aabc3f43",
    "dur": 1.41
   },
   "common-out_b": {
    "file": "common-out_b.mp3",
-   "hash": "585f1c89a7a6",
-   "dur": 1.23
+   "hash": "58e2cb5ca7da",
+   "dur": 1.15
   },
   "common-out_c": {
    "file": "common-out_c.mp3",
-   "hash": "4fb1a1c40fa1",
-   "dur": 1.23
+   "hash": "89392aec22f5",
+   "dur": 1.31
   },
   "common-hold": {
    "file": "common-hold.mp3",
-   "hash": "257c88d54bb7",
-   "dur": 0.99
+   "hash": "583822949245",
+   "dur": 1.07
   },
   "common-holdout": {
    "file": "common-holdout.mp3",
-   "hash": "7a9640748fe9",
-   "dur": 2.19
+   "hash": "a08d7dd8e07e",
+   "dur": 2.04
   },
   "common-free": {
    "file": "common-free.mp3",
-   "hash": "0af93f08b2a8",
+   "hash": "5346b35471d1",
    "dur": 1.57
   },
   "common-on_your_own": {
    "file": "common-on_your_own.mp3",
-   "hash": "a1f790438089",
-   "dur": 1.72
+   "hash": "efa35a6af0f6",
+   "dur": 2.43
   },
   "common-meditate": {
    "file": "common-meditate.mp3",
-   "hash": "2774ee4ad707",
-   "dur": 2.27
+   "hash": "2d723c20102c",
+   "dur": 2.85
   },
   "common-seal_intro": {
    "file": "common-seal_intro.mp3",
-   "hash": "e797399a2dd7",
+   "hash": "4b27f88d0e9f",
    "dur": 2.19
   },
   "common-complete": {
    "file": "common-complete.mp3",
-   "hash": "929cd706bb62",
-   "dur": 1.8
+   "hash": "2e6120a8d6e8",
+   "dur": 2.69
   },
   "common-test": {
    "file": "common-test.mp3",
-   "hash": "150e843d9a4d",
-   "dur": 3
+   "hash": "3a2b213a6f97",
+   "dur": 3.55
   },
   "mon-today": {
    "file": "mon-today.mp3",
-   "hash": "b3334db5bceb",
-   "dur": 6.43
+   "hash": "ff2b09240f3c",
+   "dur": 7.24
   },
   "mon-intro": {
    "file": "mon-intro.mp3",
-   "hash": "412d3bbd3c78",
+   "hash": "27e3782d23b4",
    "dur": 7.81
   },
   "mon-pool": {
    "file": "mon-pool.mp3",
-   "hash": "5690bfe4ae06",
-   "dur": 6.69
+   "hash": "d62a9fdd829d",
+   "dur": 6.92
   },
   "mon-ask": {
    "file": "mon-ask.mp3",
-   "hash": "738d368a23ae",
+   "hash": "3ae5e8a46762",
    "dur": 6.92
   },
   "mon-seal": {
    "file": "mon-seal.mp3",
-   "hash": "19047c788fcb",
-   "dur": 3.32
+   "hash": "3b9d864d0519",
+   "dur": 3.97
   },
   "tue-today": {
    "file": "tue-today.mp3",
-   "hash": "40f56dd815d6",
-   "dur": 5.88
+   "hash": "91cf419a306d",
+   "dur": 6.77
   },
   "tue-intro": {
    "file": "tue-intro.mp3",
-   "hash": "d440961876fd",
-   "dur": 6.03
+   "hash": "1bc0965b8e3e",
+   "dur": 6.43
   },
   "tue-in_left": {
    "file": "tue-in_left.mp3",
-   "hash": "02db5a3adfa1",
-   "dur": 1.72
+   "hash": "3db33728ceda",
+   "dur": 1.88
   },
   "tue-out_right": {
    "file": "tue-out_right.mp3",
-   "hash": "546d031cf5d8",
+   "hash": "12ac29f73213",
    "dur": 1.72
   },
   "tue-in_right": {
    "file": "tue-in_right.mp3",
-   "hash": "bf67e88005c2",
-   "dur": 1.8
+   "hash": "5e28a955f536",
+   "dur": 1.88
   },
   "tue-out_left": {
    "file": "tue-out_left.mp3",
-   "hash": "98f50529697e",
+   "hash": "1d446dd691b5",
    "dur": 1.8
   },
   "tue-pool": {
    "file": "tue-pool.mp3",
-   "hash": "131585b695eb",
-   "dur": 6.53
+   "hash": "3acf1bb5898a",
+   "dur": 6.61
   },
   "tue-ask": {
    "file": "tue-ask.mp3",
-   "hash": "091accfe7fe7",
-   "dur": 6.53
+   "hash": "aaff6e55011c",
+   "dur": 6.35
   },
   "tue-seal": {
    "file": "tue-seal.mp3",
-   "hash": "c2734266196c",
-   "dur": 4.05
+   "hash": "ae38d0aeba63",
+   "dur": 4.6
   },
   "wed-today": {
    "file": "wed-today.mp3",
-   "hash": "bb3de4cc44db",
-   "dur": 5.96
+   "hash": "502d33a8c6fa",
+   "dur": 6.61
   },
   "wed-intro": {
    "file": "wed-intro.mp3",
-   "hash": "db38b5ee6e08",
-   "dur": 4.91
+   "hash": "9f1cf3586cb3",
+   "dur": 5.25
   },
   "wed-pump": {
    "file": "wed-pump.mp3",
-   "hash": "e2b59146398c",
+   "hash": "a02d2163ea26",
    "dur": 0.91
   },
   "wed-fullin": {
    "file": "wed-fullin.mp3",
-   "hash": "cd493bd90154",
-   "dur": 1.57
+   "hash": "7153f9f9cb83",
+   "dur": 1.72
   },
   "wed-bandha": {
    "file": "wed-bandha.mp3",
-   "hash": "9968a98cc508",
-   "dur": 2.77
+   "hash": "f2fa1ce7b360",
+   "dur": 2.69
   },
   "wed-release": {
    "file": "wed-release.mp3",
-   "hash": "d41177ce6557",
+   "hash": "1c5bb6010a1f",
    "dur": 2.35
   },
   "wed-pool": {
    "file": "wed-pool.mp3",
-   "hash": "8e5b69a166c9",
-   "dur": 6.11
+   "hash": "b372f43d7c86",
+   "dur": 6.43
   },
   "wed-ask": {
    "file": "wed-ask.mp3",
-   "hash": "2673f661490a",
+   "hash": "04a7f4e26ac7",
    "dur": 7.47
   },
   "wed-seal": {
    "file": "wed-seal.mp3",
-   "hash": "ad5175e26767",
-   "dur": 4.21
+   "hash": "f36967379078",
+   "dur": 4.68
   },
   "thu-today": {
    "file": "thu-today.mp3",
-   "hash": "a558f1de351f",
-   "dur": 5.72
+   "hash": "dea79bb8b249",
+   "dur": 6.43
   },
   "thu-intro": {
    "file": "thu-intro.mp3",
-   "hash": "4dd050b1eb18",
-   "dur": 8.12
+   "hash": "fb9f5cffaa3a",
+   "dur": 8.67
   },
   "thu-pool": {
    "file": "thu-pool.mp3",
-   "hash": "2b9cd3475b32",
-   "dur": 6.19
+   "hash": "dc28b0720099",
+   "dur": 6.35
   },
   "thu-ask": {
    "file": "thu-ask.mp3",
-   "hash": "047a87b795b3",
-   "dur": 7.08
+   "hash": "0a75c21caf76",
+   "dur": 6.69
   },
   "thu-seal": {
    "file": "thu-seal.mp3",
-   "hash": "174d123d3750",
-   "dur": 3.16
+   "hash": "1f5bd9cfb76c",
+   "dur": 3.87
   },
   "fri-today": {
    "file": "fri-today.mp3",
-   "hash": "e0c9e683dca7",
-   "dur": 6.03
+   "hash": "7bb37ca8475b",
+   "dur": 6.53
   },
   "fri-intro": {
    "file": "fri-intro.mp3",
-   "hash": "80b60406a8ce",
-   "dur": 4.75
+   "hash": "7c9fe0f2c126",
+   "dur": 4.83
   },
   "fri-pool": {
    "file": "fri-pool.mp3",
-   "hash": "428af48fac97",
-   "dur": 6.03
+   "hash": "93543707f5dd",
+   "dur": 6.11
   },
   "fri-ask": {
    "file": "fri-ask.mp3",
-   "hash": "e6555d306a6a",
-   "dur": 6.77
+   "hash": "48ac9485da34",
+   "dur": 6.43
   },
   "fri-seal": {
    "file": "fri-seal.mp3",
-   "hash": "097f205bea02",
-   "dur": 4.05
+   "hash": "005434cb4a8c",
+   "dur": 4.28
   },
   "sat-today": {
    "file": "sat-today.mp3",
-   "hash": "9fa2700816b7",
-   "dur": 5.96
+   "hash": "968fa9e61ab1",
+   "dur": 7.08
   },
   "sat-intro": {
    "file": "sat-intro.mp3",
-   "hash": "bd580689fcdb",
-   "dur": 4.52
+   "hash": "3c54539b3dfb",
+   "dur": 4.99
   },
   "sat-pool": {
    "file": "sat-pool.mp3",
-   "hash": "e7374986dcee",
-   "dur": 6.61
+   "hash": "db60503d5e89",
+   "dur": 6.92
   },
   "sat-ask": {
    "file": "sat-ask.mp3",
-   "hash": "e7005f91c39c",
-   "dur": 6.69
+   "hash": "bf356bb388d8",
+   "dur": 6.92
   },
   "sat-seal": {
    "file": "sat-seal.mp3",
-   "hash": "084afc804d4b",
-   "dur": 3.4
+   "hash": "5099bca3215b",
+   "dur": 3.87
   },
   "sun-today": {
    "file": "sun-today.mp3",
-   "hash": "c4c5aceeaf78",
-   "dur": 6.84
+   "hash": "df2d6e395cff",
+   "dur": 7.63
   },
   "sun-intro": {
    "file": "sun-intro.mp3",
-   "hash": "66fe816fa2f8",
-   "dur": 7.24
+   "hash": "74b5ea4b7a75",
+   "dur": 6.84
   },
   "sun-count_lost": {
    "file": "sun-count_lost.mp3",
-   "hash": "8caad8ea8d3c",
-   "dur": 3
+   "hash": "0c80faa7d485",
+   "dur": 3.16
   },
   "sun-pool": {
    "file": "sun-pool.mp3",
-   "hash": "0acb3ffcddee",
-   "dur": 7
+   "hash": "032133c6546f",
+   "dur": 7.39
   },
   "sun-ask": {
    "file": "sun-ask.mp3",
-   "hash": "802831590fe1",
-   "dur": 6.77
+   "hash": "aee43ae05224",
+   "dur": 7
   },
   "sun-seal": {
    "file": "sun-seal.mp3",
-   "hash": "aca968574611",
-   "dur": 3.63
+   "hash": "a0ff21b6dad1",
+   "dur": 3.87
   }
  }
 }

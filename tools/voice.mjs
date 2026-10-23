@@ -23,9 +23,9 @@ const AUDITIONS = join(ROOT, "tools", ".auditions");
 const KEY_FILE = join(homedir(), ".config", "seven-pools", "elevenlabs_key");
 const API = "https://api.elevenlabs.io";
 
-// Slow, soft delivery. Lower stability = more expressive; speed below 1 slows the voice down.
+// Soft delivery. Lower stability = more expressive. Note: Eleven v4 ignores speed; ELEVEN_MODEL=eleven_multilingual_v2 honours it.
 const MODEL = process.env.ELEVEN_MODEL || "eleven_v4";
-const SETTINGS = { stability: 0.6, similarity_boost: 0.8, style: 0.1, use_speaker_boost: true, speed: 0.85 };
+const SETTINGS = { stability: 0.6, similarity_boost: 0.8, style: 0.1, use_speaker_boost: true, speed: 0.78 };
 const CALM = /calm|sooth|soft|meditat|asmr|relax|gentle|whisper|warm|serene|breath/i;
 
 function readKey() {
