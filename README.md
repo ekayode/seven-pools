@@ -19,7 +19,7 @@ Edit the `say` and `common` lines in `content/days.json`, then re-record. Only c
 node tools/voice.mjs record DJEpQQM0TKKRXElYuZUn
 ```
 
-The free ElevenLabs plan allows 10,000 characters a month; the full script is about 2,900. Lines without a recording fall back to the device's own voice.
+The free ElevenLabs plan allows 10,000 characters a month; the full script is about 3,900. Lines without a recording fall back to the device's own voice.
 
 After changing any file, bump `VERSION` in `sw.js` so phones pick up the update.
 

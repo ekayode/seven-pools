@@ -17,7 +17,9 @@ function SEGS(d){
    {key:"breath",name:d.breath.name,dur:T.breath,read:d.breath.read,pattern:d.breath.pattern,guideUntil:T.breath-G,
     lines:[[0,"intro"],...(d.breath.lines||[]),[T.breath-G,"on_your_own"]]},
    {key:"pool",name:"The pool",dur:T.pool,read:d.say.pool.replace(/\.\.\./g,","),lines:[[1,"pool"]]},
-   {key:"sit",name:"Meditation",dur:T.meditation,bell:true,read:"Silence. When a thought pulls you away, notice it and return to the breath.",lines:[[3,"meditate"]]},
+   {key:"sit",name:"Meditation",dur:T.meditation,bell:true,
+    read:`Silence, with two brief check-ins from the guru (around ${DATA.checkins.map(s=>fmt(s)).join(" and ")}) on the breath, the pool and your question. When a thought pulls you away, notice it and return to the breath.`,
+    lines:[[3,"meditate"],...DATA.checkins.map((s,k)=>[s,"checkin_"+(k+1)])]},
    {key:"seal",name:"Seal",dur:T.seal,bell:true,read:d.seal,lines:[[3,"seal_intro","seal"]]}
   ];
 }
