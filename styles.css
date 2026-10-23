@@ -84,12 +84,12 @@ h3{font-size:22px;margin-bottom:4px}
 #sit .big{font-family:var(--display);font-size:22px;color:#4a4a4a}
 #sit .small{font-size:13px}
 #sitLive{display:flex;flex-direction:column;align-items:center;gap:10px}
-/* Countdown on the black screen: readable at a glance, kept dim so it lights the room as little as possible. */
+/* Countdown on the black screen: bright enough to read from the cushion; the rest of the screen stays black. */
 .sitDial{width:240px;height:240px;margin-bottom:14px}
-.sitDial .track{stroke:#161616}
-.sitDial .prog{opacity:.75}
-.sitDial .time{color:#9a9a9a;font-size:54px}
-#sitSub{color:#5a5a5a;font-size:14px;font-variant-numeric:tabular-nums}
+.sitDial .track{stroke:#262626}
+.sitDial .time{color:#ececec;font-size:56px}
+#sit .big.step{color:#b5b5b5}
+#sitSub{color:#a0a0a0;font-size:15px;font-variant-numeric:tabular-nums}
 #paused{display:flex;flex-direction:column;align-items:center;gap:14px}
 #paused .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 #paused button{font:inherit;font-weight:600;border-radius:999px;padding:11px 24px;cursor:pointer;border:1px solid #444;background:#111;color:#ccc}
