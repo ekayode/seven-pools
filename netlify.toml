@@ -1,0 +1,14 @@
+# Netlify serves the repo as-is: no build step, the root folder is the site.
+[build]
+  publish = "."
+
+# Phones check sw.js for updates; never let a cached copy hide a new version.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"
