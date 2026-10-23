@@ -8,7 +8,7 @@ A 12-minute daily chakra sit (one pool per weekday, from Aang's seven chakras wi
 - `app.js`: screens, session timing, bells, breath tones, voice cues.
 - `styles.css`, `index.html`: layout.
 - `manifest.webmanifest`, `sw.js`, `icons/`: what makes it installable and work offline.
-- `audio/`: the voice recordings (ElevenLabs, voice "Lily", model Eleven v4), listed in `audio/clips.json`.
+- `audio/`: the voice recordings (ElevenLabs, designed voice "Meditative Guru", model Eleven v4), listed in `audio/clips.json`.
 - `tools/voice.mjs`: records the spoken lines. Run it with no arguments for help.
 
 ## Changing what the voice says
@@ -16,10 +16,10 @@ A 12-minute daily chakra sit (one pool per weekday, from Aang's seven chakras wi
 Edit the `say` and `common` lines in `content/days.json`, then re-record. Only changed lines are re-recorded:
 
 ```bash
-node tools/voice.mjs record pFZP5JQG7iQjIQuC4Bku
+node tools/voice.mjs record 7VzE8ZWW6wZYdS1yhbXo
 ```
 
-The free ElevenLabs plan allows 10,000 characters a month; the full script is about 5,100. Lines without a recording fall back to the device's own voice.
+The free ElevenLabs plan allows 10,000 characters a month; the full script is about 2,700. Lines without a recording fall back to the device's own voice.
 
 After changing any file, bump `VERSION` in `sw.js` so phones pick up the update.
 
