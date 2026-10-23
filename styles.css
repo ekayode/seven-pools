@@ -41,6 +41,16 @@ button:focus-visible{outline:2px solid var(--chakra);outline-offset:2px}
 .facts dt{color:var(--muted)} .facts dd{margin:0}
 .release{font-size:15px;color:var(--muted);border-left:2px solid var(--chakra);padding-left:12px;margin:4px 0 0}
 
+/* Countdown: ring empties as the 12 minutes run down. */
+.clock{display:flex;flex-direction:column;align-items:center;gap:10px}
+.dial{position:relative;width:200px;height:200px}
+.dial svg{width:100%;height:100%;transform:rotate(-90deg)}
+.dial circle{fill:none;stroke-width:5}
+.dial .track{stroke:var(--line)}
+.dial .prog{stroke:var(--chakra);stroke-linecap:round;stroke-dasharray:339.29;transition:stroke-dashoffset .3s linear}
+.dial .time{position:absolute;inset:0;display:grid;place-items:center;font-size:46px;font-weight:500;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+#clockSub{font-size:14px;color:var(--muted);text-align:center;font-variant-numeric:tabular-nums}
+
 h3{font-size:22px;margin-bottom:4px}
 .lede{font-size:14px;color:var(--muted);margin:0 0 10px}
 .steps ol{list-style:none;margin:0;padding:0}

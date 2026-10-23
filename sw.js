@@ -1,6 +1,6 @@
 // Offline support: app files are cached on install; fonts are cached the first time they load.
 // Bump VERSION whenever you change any app file so phones pick up the update.
-const VERSION = "sp-v1";
+const VERSION = "sp-v2";
 const APP = ["./", "index.html", "styles.css", "app.js", "content/days.json", "manifest.webmanifest",
   "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png"];
 

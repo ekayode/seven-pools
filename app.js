@@ -1,7 +1,7 @@
 /* Seven Pools: screens, timing and audio. Content comes from content/days.json. */
 const $=id=>document.getElementById(id);
 let DAYS=[], SETTLE=10, todayIdx=0;
-let cur=0, segs=[], segI=-1, segElapsed=0, running=false, last=0, timer=null, wake=null, ctx=null, lastPhase=-1, midSaid=false, tickAcc=0;
+let cur=0, segs=[], segI=-1, segElapsed=0, running=false, inSession=false, done=false, last=0, timer=null, wake=null, ctx=null, lastPhase=-1, midSaid=false, tickAcc=0;
 const prefs={voice:true,tones:true};
 try{const p=JSON.parse(localStorage.getItem("sp-prefs")||"{}");Object.assign(prefs,p)}catch(e){}
 const canSpeak="speechSynthesis" in window;
@@ -36,8 +36,24 @@ function selectDay(i){
   $("release").textContent=d.release;
   $("teach").innerHTML=`<b>If you teach this</b>${d.teach}`;
   $("barNote").textContent=`${d.el} · ${d.where.split(",")[0]}`;
-  segs=SEGS(d);
+  segs=SEGS(d);done=false;drawClock();
   $("steps").innerHTML=segs.map((s,k)=>`<li><span class="n">${k+1}</span><span class="t">${s.name}</span><span class="m">${s.dur/60} min</span>${s.q?`<span class="q">“${s.read}”</span><span class="hear">You'll hear it at the start and again halfway.</span>`:`<span class="d">${s.read}</span>`}</li>`).join("");
+}
+
+/* ---------- countdown ---------- */
+const RING=339.29; // circumference of the r=54 ring
+const fmt=s=>{s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+const total=()=>segs.reduce((a,s)=>a+s.dur,0);
+function timeLeft(){if(!inSession)return done?0:total();if(segI<0)return total();
+  let r=segs[segI].dur-segElapsed;for(let k=segI+1;k<segs.length;k++)r+=segs[k].dur;return r}
+function drawClock(){
+  const l=timeLeft(),t=fmt(l);let sub;
+  if(!inSession)sub=done?"Complete. Carry the seal with you.":`Ready · ${segs.length} steps`;
+  else if(segI<0)sub=`Settling · starts in ${fmt(SETTLE-segElapsed)}`;
+  else sub=`Step ${segI+1} of ${segs.length} · ${segs[segI].name} · ${fmt(segs[segI].dur-segElapsed)} left`;
+  if($("clockTime").textContent!==t){$("clockTime").textContent=t;$("sitTime").textContent=t+" left"}
+  if($("clockSub").textContent!==sub)$("clockSub").textContent=sub;
+  $("ringProg").style.strokeDashoffset=RING*(1-l/total());
 }
 
 /* ---------- audio ---------- */
@@ -72,9 +88,9 @@ function enterSeg(i){segI=i;segElapsed=0;lastPhase=-1;midSaid=false;tickAcc=0;
 function begin(){
   ac();if(canSpeak&&prefs.voice){say(`${DAYS[cur].el}. Put the phone down and settle. We begin in ten seconds.`)}
   $("sit").hidden=false;$("sitLive").hidden=false;$("paused").hidden=true;$("sitStep").textContent="Settling";
-  segI=-1;segElapsed=0;run();keepAwake();
+  segI=-1;segElapsed=0;inSession=true;done=false;run();keepAwake();drawClock();
 }
-function run(){running=true;last=performance.now();clearInterval(timer);timer=setInterval(tick,100)}
+function run(){running=true;last=performance.now();clearInterval(timer);timer=setInterval(()=>{tick();drawClock()},100)}
 function tick(){
   const now=performance.now(),dt=Math.min((now-last)/1000,1);last=now;segElapsed+=dt;
   if(segI===-1){if(segElapsed>=SETTLE){bell(1);setTimeout(()=>{if(running&&segI===0)say(segs[0].say)},1800);segI=0;segElapsed=0;$("sitStep").textContent="Step 1 of 6"}return}
@@ -89,7 +105,7 @@ function tick(){
     if(p[0]==="pump"){tickAcc+=dt;if(tickAcc>=.9){tickAcc=0;tone("tick")}}
   }
 }
-function finish(){stop();bell(3);setTimeout(()=>say("Session complete. Carry the seal with you."),3500);addCount();
+function finish(){stop();inSession=false;done=true;bell(3);setTimeout(()=>say("Session complete. Carry the seal with you."),3500);addCount();
   setTimeout(()=>{$("sit").hidden=true},6000)}
 function stop(){running=false;clearInterval(timer);timer=null;try{wake&&wake.release()}catch(e){}wake=null}
 function pause(why){if(!running)return;stop();try{speechSynthesis.cancel()}catch(e){}$("sitLive").hidden=true;$("paused").hidden=false;
@@ -98,7 +114,7 @@ function pause(why){if(!running)return;stop();try{speechSynthesis.cancel()}catch
 $("begin").onclick=begin;
 $("sit").onclick=e=>{if(e.target.closest("#paused"))return;pause()};
 $("resume").onclick=()=>{ac();$("paused").hidden=true;$("sitLive").hidden=false;run();keepAwake()};
-$("end").onclick=()=>{stop();try{speechSynthesis.cancel()}catch(e){}$("sit").hidden=true};
+$("end").onclick=()=>{stop();inSession=false;drawClock();try{speechSynthesis.cancel()}catch(e){}$("sit").hidden=true};
 $("tVoice").onclick=()=>{prefs.voice=!prefs.voice;savePrefs();syncToggles()};
 $("tTones").onclick=()=>{prefs.tones=!prefs.tones;savePrefs();syncToggles()};
 $("test").onclick=()=>{bell(1);setTimeout(()=>tone("in",3),600);setTimeout(()=>tone("out",3),3700);say("This is how the cues will sound.")};
