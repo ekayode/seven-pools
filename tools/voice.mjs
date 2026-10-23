@@ -3,7 +3,7 @@
 //
 //   node tools/voice.mjs key                 save your ElevenLabs API key (hidden input, stored outside the project)
 //   node tools/voice.mjs voices              list the voices on your account; ★ marks calm / soft ones
-//   node tools/voice.mjs audition [ids...]   record and play a short sample for each voice (default: the ★ ones)
+//   node tools/voice.mjs audition [ids...]   record and play a short sample for each voice (default: the ★ ones); --no-play to only save
 //   node tools/voice.mjs record <voiceId>    record all lines; unchanged lines are skipped. --force re-records everything
 //   node tools/voice.mjs play <clipId>       play one recording, e.g. fri-arrive or common-in_a
 //
@@ -24,7 +24,7 @@ const KEY_FILE = join(homedir(), ".config", "seven-pools", "elevenlabs_key");
 const API = "https://api.elevenlabs.io";
 
 // Slow, soft delivery. Lower stability = more expressive; speed below 1 slows the voice down.
-const MODEL = "eleven_multilingual_v2";
+const MODEL = process.env.ELEVEN_MODEL || "eleven_v4";
 const SETTINGS = { stability: 0.6, similarity_boost: 0.8, style: 0.1, use_speaker_boost: true, speed: 0.85 };
 const CALM = /calm|sooth|soft|meditat|asmr|relax|gentle|whisper|warm|serene|breath/i;
 
@@ -115,6 +115,7 @@ const commands = {
   },
 
   async audition(...ids) {
+    const play = !ids.includes("--no-play"); ids = ids.filter(i => i !== "--no-play");
     const { voices } = await api("/v1/voices");
     const info = v => Object.values(v.labels || {}).join(" ") + " " + (v.description || "");
     const pick = ids.length ? voices.filter(v => ids.includes(v.voice_id)) : voices.filter(v => CALM.test(info(v))).slice(0, 4);
@@ -123,10 +124,10 @@ const commands = {
     const sample = `${lines["fri-arrive"]} ... ${lines["common-in_a"]} ... ${lines["common-out_a"]}`;
     mkdirSync(AUDITIONS, { recursive: true });
     for (const v of pick) {
-      const file = join(AUDITIONS, `${v.name.replace(/[^\w]+/g, "_")}.mp3`);
+      const file = join(AUDITIONS, `${v.name.split(" - ")[0]}-${MODEL}.mp3`);
       writeFileSync(file, await tts(v.voice_id, sample));
-      console.log(`▶ ${v.name}  (${v.voice_id})`);
-      execFileSync("afplay", [file]);
+      console.log(`▶ ${v.name}  (${v.voice_id})  ${file}`);
+      if (play) execFileSync("afplay", [file]);
     }
     console.log(`\nSamples saved in ${AUDITIONS}. To record with one:  node tools/voice.mjs record <voiceId>`);
   },
