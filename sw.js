@@ -1,13 +1,23 @@
 // Offline support. App files: network first (so updates show on the next open), cache when offline.
 // Fonts: cache first, saved the first time they load.
 // Bump VERSION whenever you change any app file so phones refresh their saved copy.
-const VERSION = "sp-v5";
+const VERSION = "sp-v6";
 const APP = ["./", "index.html", "styles.css", "app.js", "content/days.json", "manifest.webmanifest",
   "icons/apple-touch-icon.png", "icons/icon-192.png", "icons/icon-512.png"];
+const fresh = u => new Request(u, { cache: "reload" }); // skips the browser's HTTP cache, which can still hold the previous version
+
+// The voice recordings listed in audio/clips.json, so every day's voice works offline.
+async function audioFiles() {
+  try {
+    const res = await fetch(fresh("audio/clips.json"));
+    if (!res.ok) return [];
+    return ["audio/clips.json", ...Object.values((await res.json()).clips).map(c => "audio/" + c.file)];
+  } catch { return []; }
+}
 
 self.addEventListener("install", e => {
-  // cache: "reload" skips the browser's HTTP cache, which can still hold the previous version.
-  e.waitUntil(caches.open(VERSION).then(c => c.addAll(APP.map(u => new Request(u, { cache: "reload" }))))
+  e.waitUntil(caches.open(VERSION)
+    .then(async c => { await c.addAll(APP.map(fresh)); await c.addAll((await audioFiles()).map(fresh)).catch(() => {}); })
     .then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", e => {
