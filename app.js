@@ -23,15 +23,15 @@ function SEGS(d){
    {key:"seal",name:"Seal",dur:T.seal,bell:true,read:d.seal,lines:[[3,"seal_intro","seal"]]}
   ];
 }
-// No guidance: straight into the meditation. A bell starts it, soft bells mark the check-in times, three bells end it.
+// No guidance: straight into the meditation. A bell starts it, the guru's two check-ins are the only voice, three bells end it.
 function SILENT(d){
-  return [{key:"sit",name:"Meditation",dur:DATA.timeline.meditation,lines:[],chimes:DATA.checkins,
-    read:`Silence, with no voice. A bell begins the sit, a soft bell marks ${DATA.checkins.map(s=>fmt(s)).join(" and ")}, and three bells end it. When a thought pulls you away, notice it and return to the breath.`}];
+  return [{key:"sit",name:"Meditation",dur:DATA.timeline.meditation,lines:DATA.checkins.map((s,k)=>[s,"checkin_"+(k+1)]),q:true,read:d.ask,
+    pre:`Silence. A bell begins the sit, the guru checks in briefly at ${DATA.checkins.map(s=>fmt(s)).join(" and ")} on the breath, the pool and this question, and three bells end it.`}];
 }
 const guided=()=>prefs.mode!=="silent";
 const LEDE={
   guided:"Take a minute with it. Once you press Begin, you won't need to look again. All the guidance comes first, in about two minutes: your intention, the breath, and the pool. Then ten minutes of quiet, where the guru checks in briefly every few minutes, and a short seal.",
-  silent:"No guidance today. Once you press Begin, you get ten seconds to settle, then the meditation starts straight away. Bring the pool and the question below with you if you like."
+  silent:"No guidance up front. Once you press Begin, you get ten seconds to settle, then the meditation starts straight away. Read the pool above and the question below first: the guru will check in on them twice."
 };
 const minLabel=s=>{const m=s/60;return (Number.isInteger(m)?m:Math.floor(m)+(m%1>=.5?"½":""))+" min"};
 
@@ -145,10 +145,10 @@ function keepAwake(){try{navigator.wakeLock&&navigator.wakeLock.request("screen"
 function phaseIdx(seg,t){const len=seg.pattern.reduce((a,p)=>a+p[1],0);let x=t%len,k=0,cyc=Math.floor(t/len);
   for(;k<seg.pattern.length;k++){if(x<seg.pattern[k][1])break;x-=seg.pattern[k][1]}return cyc*100+k}
 function enterSeg(i){segI=i;segElapsed=0;lastPhase=-1;tickAcc=0;rot={in:0,out:0};
-  const s=segs[i];s.fired=0;s.chimed=0;s.paceFrom=null;
+  const s=segs[i];s.fired=0;s.paceFrom=null;
   if(s.bell)bell(1);$("sitStep").textContent=segs.length>1?`Step ${i+1} of ${segs.length}`:s.name}
 function begin(){
-  ac();if(guided())loadClips(dayClipIds(DAYS[cur]));stopVoice();
+  ac();loadClips(dayClipIds(DAYS[cur]));stopVoice();
   $("sit").hidden=false;$("sitLive").hidden=false;$("paused").hidden=true;$("sitStep").textContent="Settling";
   segI=-1;segElapsed=0;inSession=true;done=false;run();keepAwake();drawClock();
   if(guided())setTimeout(()=>{if(running&&segI<0)speak(["common-settle"])},600);
@@ -162,8 +162,6 @@ function tick(){
   // Spoken lines scheduled for this step.
   while(seg.fired<seg.lines.length&&segElapsed>=seg.lines[seg.fired][0]){
     const [,...keys]=seg.lines[seg.fired++];speak(keys.map(k=>clipId(k)))}
-  // Soft time-marking bells (no-guidance sits).
-  while(seg.chimes&&seg.chimed<seg.chimes.length&&segElapsed>=seg.chimes[seg.chimed]){seg.chimed++;bell(1,0,.5)}
   // Breath pacing: a tone and a soft spoken cue at each phase.
   if(seg.pattern){
     if(seg.paceFrom==null&&segElapsed>25)seg.paceFrom=segElapsed; // in case the introduction never reports finishing
